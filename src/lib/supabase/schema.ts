@@ -15,5 +15,44 @@ export const workspaces = pgTable("workspaces", {
   bannerUrl: text('banner_url'),
 });
 
-// Export the table so that it's detected by Drizzle ORM
-export const tables = { workspaces };
+
+export const folders = pgTable('folders',{
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    mode: 'string',
+  }),
+  title:text('title').notNull(),
+  iconId: text('icont_id').notNull(),
+  data:text('data'),
+  inTrash: text('in-trash'),
+  logo: text('logo'),
+  bannerUrl: text('banner_url'),
+  workspaceId : uuid('workspaceId').references(()=> workspaces.id,{
+    onDelete:"cascade"
+  })
+
+})
+
+
+
+
+export const files = pgTable('files',{
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    mode: 'string',
+  }),
+  title:text('title').notNull(),
+  iconId: text('icont_id').notNull(),
+  data:text('data'),
+  inTrash: text('in-trash'),
+  logo: text('logo'),
+  bannerUrl: text('banner_url'),
+  workspaceId : uuid('workspaceId').references(()=> workspaces.id,{
+    onDelete:"cascade"
+  }),
+folderId :uuid('folder_id').references(()=>folders.id ,{
+  onDelete:"cascade"
+})
+})
